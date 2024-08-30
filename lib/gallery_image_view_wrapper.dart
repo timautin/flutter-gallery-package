@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:galleryimage/app_cached_network_image.dart';
+import 'package:galleryimage/util.dart';
 
 import 'gallery_item_model.dart';
 
@@ -45,16 +46,17 @@ class GalleryImageViewWrapper extends StatefulWidget {
 }
 
 class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
-  late final PageController _controller =
-      PageController(initialPage: widget.initialIndex ?? 0);
-  int _currentPage = 0;
+
+  late final PageController _controller = PageController(initialPage: widget.initialIndex ?? 0);
+  late int _currentPage = widget.initialIndex ?? 0;
 
   @override
   void initState() {
-    _currentPage = 0;
+
     _controller.addListener(() {
       setState(() {
         _currentPage = _controller.page?.toInt() ?? 0;
+
       });
     });
     super.initState();
@@ -77,21 +79,18 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
       backgroundColor: widget.backgroundColor,
       body: SafeArea(
         child: Container(
-          constraints:
-              BoxConstraints.expand(height: MediaQuery.of(context).size.height),
+          constraints: BoxConstraints.expand(height: MediaQuery.of(context).size.height),
           child: Column(
             children: [
               Expanded(
                 child: GestureDetector(
                   onVerticalDragEnd: (details) {
-                    if (widget.closeWhenSwipeUp &&
-                        details.primaryVelocity! < 0) {
-                      //'up'
+                    //'up'
+                    if (widget.closeWhenSwipeUp && details.primaryVelocity! < 0) {
                       Navigator.of(context).pop();
                     }
-                    if (widget.closeWhenSwipeDown &&
-                        details.primaryVelocity! > 0) {
-                      // 'down'
+                    // 'down'
+                    if (widget.closeWhenSwipeDown && details.primaryVelocity! > 0) {
                       Navigator.of(context).pop();
                     }
                   },
@@ -100,7 +99,7 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
                     controller: _controller,
                     itemCount: widget.galleryItems.length,
                     itemBuilder: (context, index) =>
-                        _buildImage(widget.galleryItems[index]),
+                      _buildImage(widget.galleryItems[index]),
                   ),
                 ),
               ),
@@ -111,8 +110,8 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: widget.galleryItems
-                          .map((e) => _buildLitImage(e))
-                          .toList(),
+                        .map((e) => _buildLitImage(e))
+                        .toList(),
                     ),
                   ),
                 ),
@@ -131,11 +130,19 @@ class _GalleryImageViewWrapperState extends State<GalleryImageViewWrapper> {
         minScale: widget.minScale,
         maxScale: widget.maxScale,
         child: Center(
-          child: AppCachedNetworkImage(
-            imageUrl: item.imageUrl,
-            loadingWidget: widget.loadingWidget,
-            errorWidget: widget.errorWidget,
-            radius: widget.radius,
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: item.attribution == null ? 0 : 24),
+                child: AppCachedNetworkImage(
+                  imageUrl: item.imageUrl,
+                  loadingWidget: widget.loadingWidget,
+                  errorWidget: widget.errorWidget,
+                  radius: widget.radius,
+                ),
+              ),
+              Positioned(bottom: 0, left: 0, right: 0, child: item.attribution == null ? const EmptyWidget() : Text(item.attribution ?? "", textAlign: TextAlign.center,))
+            ]
           ),
         ),
       ),

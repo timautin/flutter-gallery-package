@@ -9,6 +9,7 @@ import './util.dart';
 
 class GalleryImage extends StatefulWidget {
   final List<String> imageUrls;
+  final List<String>? imageAttributions;
   final String? titleGallery;
   final int numOfShowImages;
   final int crossAxisCount;
@@ -33,6 +34,7 @@ class GalleryImage extends StatefulWidget {
   const GalleryImage({
     Key? key,
     required this.imageUrls,
+    this.imageAttributions,
     this.titleGallery,
     this.childAspectRatio = 1,
     this.crossAxisCount = 3,
@@ -63,7 +65,7 @@ class _GalleryImageState extends State<GalleryImage> {
   List<GalleryItemModel> galleryItems = <GalleryItemModel>[];
   @override
   void initState() {
-    _buildItemsList(widget.imageUrls);
+    _buildItemsList(widget.imageUrls, widget.imageAttributions);
     super.initState();
   }
 
@@ -166,12 +168,17 @@ class _GalleryImageState extends State<GalleryImage> {
   }
 
 // clear and build list
-  void _buildItemsList(List<String> items) {
+  void _buildItemsList(List<String> urls, List<String>? attributions) {
+
     galleryItems.clear();
-    for (var item in items) {
-      galleryItems.add(
-        GalleryItemModel(id: item, imageUrl: item, index: items.indexOf(item)),
-      );
+
+    for (int i = 0; i < urls.length; i++) {
+      String url = urls[i];
+      String? attribution;
+      if (attributions != null && attributions.length == urls.length) {
+        attribution = attributions[i];
+      }
+      galleryItems.add(GalleryItemModel(id: url, imageUrl: url, attribution: attribution, index: urls.indexOf(url)));
     }
   }
 }

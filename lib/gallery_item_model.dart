@@ -3,6 +3,7 @@ class GalleryItemModel {
     required this.id,
     required this.imageUrl,
     required this.index,
+    this.attribution
   });
   // index in list of image
   final int index;
@@ -10,4 +11,5 @@ class GalleryItemModel {
   final String id;
   // image url
   final String imageUrl;
+  final String? attribution;
 }
