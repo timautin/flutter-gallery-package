@@ -36,8 +36,15 @@ class AppCachedNetworkImage extends StatelessWidget {
     if (isFileUri) {
         // uri.path contains encoded url chars (if space is %20)
         final pathDecoded = Uri.decodeFull(uri.path);
-        return Image.file(File(pathDecoded), width: width, height: height);
-    } else {
+        return Image.file(
+          File(pathDecoded),
+          width: width,
+          height: height,
+          fit: fit,
+          errorBuilder: (context, error, stackTrace) => errorWidget ?? const Icon(Icons.error)
+        );
+    }
+    else {
       return CachedNetworkImage(
         height: height,
         width: width,
