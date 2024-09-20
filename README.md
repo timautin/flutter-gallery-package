@@ -17,7 +17,7 @@ A Flutter plugin that list of images from URLs
     <img src="https://img.shields.io/badge/build-passing-green"
          alt="Build">
   </a>
-  <a href="https://pub.dartlang.org/packages/galleryimage"><img src="https://img.shields.io/badge/pub-v2.0.1-blue"></a>
+  <a href="https://pub.dartlang.org/packages/galleryimage"><img src="https://img.shields.io/badge/pub-v2.0.2-blue"></a>
   
 </p>
 
